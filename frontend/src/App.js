@@ -11,7 +11,7 @@ class App extends Component {
   };
 
   async componentDidMount() {
-    const response = await fetch('/api/card');
+    const response = await fetch('http://localhost:8080/api/card');
     const body = await response.json();
     this.setState({ cards: body, isLoading: false });
   }
