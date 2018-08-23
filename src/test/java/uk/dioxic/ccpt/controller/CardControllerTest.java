@@ -70,15 +70,15 @@ public class CardControllerTest {
 
         cardRepository.deleteAllInBatch();
         cardList = Arrays.asList(
-                new Card(1, 123, "Bob", BigDecimal.ZERO, BigDecimal.ONE),
-                new Card(2, 456, "Alice", BigDecimal.ZERO, BigDecimal.ONE)
+                new Card(1, "4957442748848404", "Bob", BigDecimal.ZERO, BigDecimal.ONE),
+                new Card(2, "2221002051552177", "Alice", BigDecimal.ZERO, BigDecimal.ONE)
         );
         cardRepository.saveAll(cardList);
     }
 
     @Test
     public void userNotFound() throws Exception {
-        mockMvc.perform(get("/card/999")
+        mockMvc.perform(get("/api/card/999")
                 .contentType(contentType))
                 .andExpect(status().isNotFound());
     }
@@ -87,7 +87,7 @@ public class CardControllerTest {
     public void readSingleCard() throws Exception {
         Card expectedCard = cardList.get(0);
 
-        mockMvc.perform(get("/card/" + expectedCard.getId()))
+        mockMvc.perform(get("/api/card/" + expectedCard.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(Long.valueOf(expectedCard.getId()).intValue())))
                 .andExpect(jsonPath("$.name", is(expectedCard.getName())))
@@ -98,7 +98,7 @@ public class CardControllerTest {
 
     @Test
     public void readCards() throws Exception {
-        mockMvc.perform(get("/card"))
+        mockMvc.perform(get("/api/card"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -107,12 +107,12 @@ public class CardControllerTest {
 
     @Test
     public void createCard() throws Exception {
-        String cardJson = json(new Card(3, 345, "Kevin", BigDecimal.ZERO, BigDecimal.ZERO));
+        String cardJson = json(new Card(3, "2221002051552177", "Kevin", BigDecimal.ZERO, BigDecimal.ZERO));
 
-        this.mockMvc.perform(post("/card")
+        this.mockMvc.perform(post("/api/card")
                 .contentType(contentType)
                 .content(cardJson))
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk());
     }
 
     protected String json(Object o) throws IOException {

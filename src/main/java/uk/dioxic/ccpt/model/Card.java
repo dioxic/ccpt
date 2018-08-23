@@ -17,7 +17,7 @@ public class Card {
 
     @NotNull
     @CardNumber
-    private Integer number;
+    private String number;
 
     @NotEmpty
     private String name;
@@ -29,7 +29,7 @@ public class Card {
     @Column(name = "cardLimit")
     private BigDecimal limit;
 
-    public Card(long id, @NotNull Integer number, @NotEmpty String name, @NotNull BigDecimal balance, @NotNull BigDecimal limit) {
+    public Card(long id, @NotNull String number, @NotEmpty String name, @NotNull BigDecimal balance, @NotNull BigDecimal limit) {
         this.id = id;
         this.number = number;
         this.name = name;
@@ -49,11 +49,11 @@ public class Card {
         this.id = id;
     }
 
-    public Integer getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Integer number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
