@@ -1,6 +1,7 @@
 package uk.dioxic.ccpt;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 import uk.dioxic.ccpt.model.Card;
 import uk.dioxic.ccpt.repository.CardRepository;
 
@@ -8,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
-//@Component
+@Component
 public class CardCommandLineRunner implements CommandLineRunner {
 
     private final CardRepository repository;

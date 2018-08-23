@@ -4,8 +4,8 @@ import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 class CardAdd extends Component {
 
   emptyItem = {
-    name: 'Shabby',
-    number: 69,
+    name: 'Bob',
+    number: '4957442748848404',
     limit: 1000,
     balance: 0
   };

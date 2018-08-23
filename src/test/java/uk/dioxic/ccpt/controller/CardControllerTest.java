@@ -23,13 +23,15 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
-import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
-import static org.assertj.core.api.Assertions.*;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -67,13 +69,6 @@ public class CardControllerTest {
     @Before
     public void setup() {
         mockMvc = webAppContextSetup(webApplicationContext).build();
-
-        cardRepository.deleteAllInBatch();
-        cardList = Arrays.asList(
-                new Card(1, "4957442748848404", "Bob", BigDecimal.ZERO, BigDecimal.ONE),
-                new Card(2, "2221002051552177", "Alice", BigDecimal.ZERO, BigDecimal.ONE)
-        );
-        cardRepository.saveAll(cardList);
     }
 
     @Test
@@ -85,15 +80,17 @@ public class CardControllerTest {
 
     @Test
     public void readSingleCard() throws Exception {
-        Card expectedCard = cardList.get(0);
+        Optional<Card> expectedCard = cardRepository.findById(1L);
 
-        mockMvc.perform(get("/api/card/" + expectedCard.getId()))
+        assertThat(expectedCard.isPresent()).isTrue();
+
+        mockMvc.perform(get("/api/card/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(Long.valueOf(expectedCard.getId()).intValue())))
-                .andExpect(jsonPath("$.name", is(expectedCard.getName())))
-                .andExpect(jsonPath("$.number", is(expectedCard.getNumber())))
-                .andExpect(jsonPath("$.limit", is(expectedCard.getLimit().doubleValue())))
-                .andExpect(jsonPath("$.balance", is(expectedCard.getBalance().doubleValue())));
+                .andExpect(jsonPath("$.id", is(Long.valueOf(expectedCard.get().getId()).intValue())))
+                .andExpect(jsonPath("$.name", is(expectedCard.get().getName())))
+                .andExpect(jsonPath("$.number", is(expectedCard.get().getNumber())))
+                .andExpect(jsonPath("$.limit", is(expectedCard.get().getLimit().doubleValue())))
+                .andExpect(jsonPath("$.balance", is(expectedCard.get().getBalance().doubleValue())));
     }
 
     @Test
@@ -101,8 +98,7 @@ public class CardControllerTest {
         mockMvc.perform(get("/api/card"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(contentType))
-                .andExpect(jsonPath("$", hasSize(2)));
+                .andExpect(content().contentType(contentType));
     }
 
     @Test
