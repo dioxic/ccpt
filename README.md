@@ -1,5 +1,7 @@
 # Overview
 
+Should be run with Java 8 or 9.
+
 ## Components
 * Spring Boot
 * ReactJs
@@ -40,6 +42,7 @@ So long as JS dependencies have been downloaded, the frontend can be loaded from
 * swagger-ui only accessible in dev mode
 * no frontend validation
 * backend validation errors are not displayed on the frontend
+* the frontend will add a new row even if the server failed to return a successful response to the POST
 * backend url hardcoded to localhost in JS
 * no frontend testing
 * server-side unit tests should be mocking components to isolate functionality (i.e. CardController tests should be using mocked repositories)
